@@ -4,14 +4,23 @@
 //https://www.gnu.org/licenses/agpl-3.0.en.html
 //lol if you read this you are cool
 //goto gbuffers_terrain.fsh
+
 #ifndef DYNAMIC_LIGHT_GLSL
 #define DYNAMIC_LIGHT_GLSL
+
+#ifndef OPTIONS_GLSL
+#include "/lib/options.glsl"
+#endif
 
 #ifndef DYNAMIC_LIGHT_INTENSITY
     #define DYNAMIC_LIGHT_INTENSITY 1.0
 #endif
 
-//(0.0 = no tint, 1.0 = full color)
+//When0
+#ifndef HELD_LIGHT_COLOR_ENABLED
+    #define HELD_LIGHT_COLOR_ENABLED 1
+#endif
+
 #ifndef DYNAMIC_LIGHT_COLOR_INTENSITY
     #define DYNAMIC_LIGHT_COLOR_INTENSITY 0.6
 #endif
@@ -70,7 +79,6 @@ vec3 getLightColorFromItemId(int itemId) {
     if (itemId == 113) return COLOR_BLAZE;           // Blaze Rod
     if (itemId == 114) return COLOR_LAVA;            // Magma Cream
     if (itemId == 115) return COLOR_FIRE;            // Fire Charge
-    
     if (itemId == 200) return COLOR_SEA_LANTERN;     // Sea Lantern
     if (itemId == 202) return COLOR_CONDUIT;         // Conduit
     if (itemId == 203) return COLOR_BEACON;          // Beacon
@@ -78,13 +86,11 @@ vec3 getLightColorFromItemId(int itemId) {
     if (itemId == 207) return COLOR_SEA_LANTERN;     // Prismarine
     if (itemId == 208) return COLOR_GLOW_INK;        // Glow Ink Sac
     if (itemId == 209) return COLOR_NETHER_STAR;     // Nether Star
-    
     if (itemId == 300) return COLOR_GLOW_LICHEN;     // Glow Lichen
     if (itemId == 301) return COLOR_GLOW_BERRY;      // Glow Berries
     if (itemId == 302) return COLOR_OCHRE;           // Ochre Froglight
     if (itemId == 305) return COLOR_VERDANT;         // Verdant Froglight
     if (itemId == 306) return COLOR_XP_BOTTLE;       // Experience Bottle
-    
     if (itemId == 400) return COLOR_END_ROD;         // End Rod
     if (itemId == 401) return COLOR_ENDER;           // Ender Chest
     if (itemId == 404) return COLOR_AMETHYST;        // Amethyst
@@ -95,16 +101,13 @@ vec3 getLightColorFromItemId(int itemId) {
     if (itemId == 409) return COLOR_GLOW_BERRY;      // Totem of Undying (golden)
     if (itemId == 410) return COLOR_ENDER;           // Chorus
     if (itemId == 411) return COLOR_RESPAWN;         // Respawn Anchor
-    
     if (itemId == 500) return COLOR_REDSTONE;        // Redstone Torch
     if (itemId == 501) return COLOR_RS_LAMP;         // Redstone Lamp
     if (itemId == 503) return COLOR_REDSTONE;        // Redstone
     if (itemId == 504) return COLOR_MAGMA;           // Magma Block
-    
     if (itemId == 600) return COLOR_GLOWSTONE;       // Glowstone
     if (itemId == 601) return COLOR_SEA_LANTERN;     // Sea Pickle
     if (itemId == 603) return COLOR_WHITE;           // Light Block
-    
     if (itemId >= 700 && itemId <= 701) return COLOR_COPPER;
     
     return COLOR_DEFAULT;
@@ -131,6 +134,10 @@ vec2 adjustLightmapWithDynamicLight(vec2 lmcoord, float dist, int heldLight, int
 }
 
 vec3 getHeldLightColor(int itemId1, int itemId2, int lightLevel1, int lightLevel2) {
+    #if HELD_LIGHT_COLOR_ENABLED == 0
+        return COLOR_WHITE;
+    #endif
+    
     vec3 color1 = (lightLevel1 > 0 && itemId1 > 0) ? getLightColorFromItemId(itemId1) : COLOR_DEFAULT;
     vec3 color2 = (lightLevel2 > 0 && itemId2 > 0) ? getLightColorFromItemId(itemId2) : COLOR_DEFAULT;  
     if (lightLevel1 > 0 && lightLevel2 > 0) {
@@ -144,6 +151,10 @@ vec3 getHeldLightColor(int itemId1, int itemId2, int lightLevel1, int lightLevel
 }
 
 vec3 applyDynamicLightTint(vec3 color, float originalBlockLight, float newBlockLight, vec3 lightColor) {
+    #if HELD_LIGHT_COLOR_ENABLED == 0
+        return color;
+    #endif
+    
     float boost = max(0.0, newBlockLight - originalBlockLight);
     if (boost <= 0.001) return color;
     float tintStrength = boost * DYNAMIC_LIGHT_COLOR_INTENSITY;

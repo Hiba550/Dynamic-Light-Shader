@@ -14,7 +14,6 @@ in vec4 glcolor;
 in float originalBlockLight;
 flat in int itemId1;
 flat in int itemId2;
-flat in int blockEntId;
 
 /* RENDERTARGETS: 0 */
 layout(location = 0) out vec4 color;
@@ -30,10 +29,4 @@ void main() {
 	
 	vec3 heldColor = getHeldLightColor(itemId1, itemId2, heldBlockLightValue, heldBlockLightValue2);
 	color.rgb = applyDynamicLightTint(color.rgb, originalBlockLight, lmcoord.x, heldColor);
-	
-	if (blockEntId > 0 && originalBlockLight > 0.01) {
-		vec3 emitColor = getLightColorFromBlockId(blockEntId);
-		float emitStrength = originalBlockLight * DYNAMIC_LIGHT_COLOR_INTENSITY * 0.15;
-		color.rgb = mix(color.rgb, color.rgb * emitColor, emitStrength);
-	}
 }

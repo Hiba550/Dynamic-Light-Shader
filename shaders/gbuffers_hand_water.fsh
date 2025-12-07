@@ -1,5 +1,4 @@
 #version 330 compatibility
-// gbuffers_hand_water.fsh - Translucent Hand Items Fragment Shader with Colored Light
 
 #include "/lib/dynamiclight.glsl"
 

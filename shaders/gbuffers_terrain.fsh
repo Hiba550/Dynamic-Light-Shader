@@ -1,5 +1,5 @@
 #version 330 compatibility
-// glad you came here, but nothing to see here!
+#include "/lib/options.glsl"
 #include "/lib/dynamiclight.glsl"
 
 uniform sampler2D lightmap;
@@ -12,7 +12,6 @@ in vec2 lmcoord;
 in vec2 texcoord;
 in vec4 glcolor;
 in float originalBlockLight;
-flat in int blockId;
 flat in int itemId1;
 flat in int itemId2;
 
@@ -29,12 +28,5 @@ void main() {
 	color *= texture(lightmap, lmcoord);
 	
 	vec3 heldColor = getHeldLightColor(itemId1, itemId2, heldBlockLightValue, heldBlockLightValue2);
-	
 	color.rgb = applyDynamicLightTint(color.rgb, originalBlockLight, lmcoord.x, heldColor);
-	
-	if (blockId > 0 && originalBlockLight > 0.01) {
-		vec3 emitColor = getLightColorFromBlockId(blockId);
-		float emitStrength = originalBlockLight * DYNAMIC_LIGHT_COLOR_INTENSITY * 0.15;
-		color.rgb = mix(color.rgb, color.rgb * emitColor, emitStrength);
-	}
 }

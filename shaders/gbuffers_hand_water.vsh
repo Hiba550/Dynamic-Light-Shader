@@ -1,5 +1,4 @@
 #version 330 compatibility
-// gbuffers_hand_water.vsh - Translucent Hand Items Vertex Shader with Colored Light
 
 #include "/lib/dynamiclight.glsl"
 

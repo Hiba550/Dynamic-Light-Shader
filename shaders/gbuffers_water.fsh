@@ -12,7 +12,6 @@ in vec2 lmcoord;
 in vec2 texcoord;
 in vec4 glcolor;
 in float originalBlockLight;
-flat in int blockId;
 flat in int itemId1;
 flat in int itemId2;
 

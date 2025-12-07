@@ -10,16 +10,12 @@ uniform int heldBlockLightValue2;
 uniform int heldItemId;
 uniform int heldItemId2;
 
-// Block ID from block.properties (terrain only)
-in vec3 mc_Entity;
-
-// Outputs to fragment shader
+//optofsh
 out vec2 lmcoord;
 out vec2 texcoord;
 out vec4 glcolor;
 out float originalBlockLight;
-flat out int blockId;           // Block ID for emission color
-flat out int itemId1;           // Pass item IDs to fragment
+flat out int itemId1;           
 flat out int itemId2;
 
 void main() {
@@ -27,7 +23,6 @@ void main() {
 	texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
 	glcolor = gl_Color;
 	
-	blockId = int(mc_Entity.x);
 	itemId1 = heldItemId;
 	itemId2 = heldItemId2;
 	
