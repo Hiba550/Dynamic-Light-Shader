@@ -1,4 +1,3 @@
-//config (watch it welcome to derry)
 #ifndef OPTIONS_GLSL
 #define OPTIONS_GLSL
 
